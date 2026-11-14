@@ -3,8 +3,10 @@
   width: 100%;
   flex: 1;
   min-height: 70vh;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 #map svg {
@@ -34,10 +36,12 @@
   position: fixed;
   z-index: 10;
   pointer-events: none;
-  padding: 0.5em 0.75em;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.6em 0.85em;
+  background: rgb(255 255 255 / 85%);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
   font-size: 0.85em;
   line-height: 1.4;
 }

@@ -1,47 +1,117 @@
+:root {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #16181d;
+  --muted: #6b7280;
+  --border: rgb(0 0 0 / 8%);
+  --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 8px 24px rgb(0 0 0 / 6%);
+  --radius: 16px;
+}
+
 body {
-  font: 100%/1.5 system-ui, sans-serif;
+  font: 100%/1.5 'Inter', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
   display: flex;
   flex-flow: column;
+  gap: 1.5em;
   max-width: 80em;
   min-height: 100vh;
   box-sizing: border-box;
   margin: auto;
-  padding: 1em;
+  padding: 2em 1.5em;
 }
 
+/* Header: title on the left, time filter card on the right */
 header {
   display: flex;
-  gap: 1em;
-  align-items: baseline;
   flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5em;
 }
 
-header label {
-  margin-left: auto;
+.title-block {
+  flex: 1 1 28em;
+}
+
+h1 {
+  width: fit-content;
+  margin: 0;
+  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  /* Gradient from the departures color to the arrivals color */
+  background: linear-gradient(
+    90deg,
+    var(--color-departures),
+    color-mix(in oklch, var(--color-departures), var(--color-arrivals)),
+    var(--color-arrivals)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  max-width: 42em;
+  margin: 0.75em 0 0;
+  color: var(--muted);
+}
+
+/* Time filter card */
+.time-filter {
   display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 0.5em;
-  align-items: center;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'title readout'
+    'slider slider';
+  align-items: baseline;
+  gap: 0.75em 1em;
+  width: min(100%, 22em);
+  box-sizing: border-box;
+  padding: 1em 1.25em 1.25em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
-header label input {
-  width: 20em;
+.time-filter-title {
+  grid-area: title;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
-header time,
-header em {
-  grid-column: 1 / -1;
-  justify-self: end;
+.time-readout {
+  grid-area: readout;
+  font-size: 1.25em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
-header em {
-  color: #888;
+.time-readout em {
+  font-size: 0.8em;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+#time-slider {
+  grid-area: slider;
+  width: 100%;
+  margin: 0;
+  accent-color: var(--color-departures);
+  cursor: pointer;
 }
 
 #map circle,
 .legend > div {
-  --color-departures: steelblue;
-  --color-arrivals: darkorange;
   --color: color-mix(
     in oklch,
     var(--color-departures) calc(100% * var(--departure-ratio)),
@@ -49,13 +119,28 @@ header em {
   );
 }
 
-/* Legend: circle swatch + label */
+/* Legend: a pill with circle swatches */
 .legend {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1.5em;
-  margin-block: 1em;
+  gap: 0.5em 1.5em;
+  align-self: center;
+  padding: 0.6em 1.25em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-size: 0.9em;
+}
+
+.legend-title {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 .legend > div {
@@ -66,8 +151,8 @@ header em {
 
 .legend > div::before {
   content: '';
-  width: 1em;
-  height: 1em;
+  width: 0.9em;
+  height: 0.9em;
   border-radius: 50%;
   background: var(--color);
 }
