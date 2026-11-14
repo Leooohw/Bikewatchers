@@ -40,10 +40,11 @@ header {
 h1 {
   width: fit-content;
   margin: 0;
-  font-size: clamp(2.75rem, 7vw, 4.5rem);
+  font-size: clamp(3.5rem, 10vw, 7rem);
   font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  padding-bottom: 0.05em; /* keep descenders inside the gradient clip */
   /* Gradient from the departures color to the arrivals color */
   background: linear-gradient(
     90deg,
@@ -68,13 +69,18 @@ h1 {
   grid-template-columns: 1fr auto;
   grid-template-areas:
     'title readout'
-    'slider slider';
+    'slider slider'
+    'ticks ticks';
   align-items: baseline;
-  gap: 0.75em 1em;
-  width: min(100%, 22em);
+  gap: 0.5em 1em;
+  width: min(100%, 24em);
   box-sizing: border-box;
-  padding: 1em 1.25em 1.25em;
-  background: var(--surface);
+  padding: 1.1em 1.4em 1em;
+  background: linear-gradient(
+    160deg,
+    var(--surface),
+    color-mix(in oklch, var(--surface) 92%, var(--color-departures))
+  );
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -91,23 +97,90 @@ h1 {
 
 .time-readout {
   grid-area: readout;
-  font-size: 1.25em;
-  font-weight: 600;
+  font-size: 1.5em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 
 .time-readout em {
-  font-size: 0.8em;
+  font-size: 0.65em;
   font-weight: 500;
+  font-style: normal;
   color: var(--muted);
 }
 
+/* Custom range slider: filled track + floating thumb */
 #time-slider {
+  --thumb: 20px;
   grid-area: slider;
   width: 100%;
-  margin: 0;
-  accent-color: var(--color-departures);
+  height: 6px;
+  margin: 0.6em 0 0.2em;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 999px;
+  background: linear-gradient(
+      90deg,
+      var(--color-departures),
+      var(--color-arrivals)
+    )
+    0 / var(--progress, 0%) 100% no-repeat,
+    rgb(0 0 0 / 8%);
   cursor: pointer;
+  outline: none;
+}
+
+#time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--color-departures);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+#time-slider::-moz-range-thumb {
+  width: var(--thumb);
+  height: var(--thumb);
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--color-departures);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+#time-slider::-moz-range-track {
+  background: transparent;
+}
+
+#time-slider:hover::-webkit-slider-thumb,
+#time-slider:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.15);
+  box-shadow:
+    0 2px 6px rgb(0 0 0 / 20%),
+    0 0 0 6px color-mix(in oklch, var(--color-departures) 20%, transparent);
+}
+
+#time-slider:hover::-moz-range-thumb,
+#time-slider:focus-visible::-moz-range-thumb {
+  transform: scale(1.15);
+  box-shadow:
+    0 2px 6px rgb(0 0 0 / 20%),
+    0 0 0 6px color-mix(in oklch, var(--color-departures) 20%, transparent);
+}
+
+.slider-ticks {
+  grid-area: ticks;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7em;
+  font-weight: 500;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 #map circle,

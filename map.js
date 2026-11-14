@@ -77,6 +77,15 @@ function computeStationTraffic(stations, timeFilter = -1) {
 
 const stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
 
+// Fill the slider track up to the thumb (works even before data finishes loading)
+const slider = document.getElementById('time-slider');
+function updateSliderFill() {
+  const { min, max, value } = slider;
+  slider.style.setProperty('--progress', `${((value - min) / (max - min)) * 100}%`);
+}
+slider.addEventListener('input', updateSliderFill);
+updateSliderFill();
+
 map.on('load', async () => {
   map.addSource('boston_route', {
     type: 'geojson',
@@ -198,7 +207,7 @@ map.on('load', async () => {
 
     if (timeFilter === -1) {
       selectedTime.textContent = '';
-      anyTimeLabel.style.display = 'block';
+      anyTimeLabel.style.display = 'inline';
     } else {
       selectedTime.textContent = formatTime(timeFilter);
       anyTimeLabel.style.display = 'none';
